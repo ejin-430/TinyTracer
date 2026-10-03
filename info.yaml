@@ -11,61 +11,47 @@ project:
   tiles: "4x2"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_tinytracer"
+  top_module:  "tt_um_reg_file_probe"      # Top module name, must start with "tt_um_"
 
   # List your project's source files here.
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
     - "tinytracer_pkg.sv"
-    - "tinytracer_if.sv"
-    - "tt_um_tinytracer.sv"
-    - "accumulator.sv"
-    - "sram_control.sv"
-    - "scene_sram.sv"
-    - "exu/exu.sv"
-    - "exu/decode.sv"
+    - "tt_um_reg_file_probe.sv"
     - "exu/reg_file.sv"
-    - "exu/functional_units/alu.sv"
-    - "exu/functional_units/cordic.sv"
-    - "exu/functional_units/fu_control.sv"
-    - "exu/functional_units/multiplier.sv"
-    - "io/io.sv"
-    - "io/uart.sv"
-    - "io/clkdiv.sv"
-    - "rtu/rtu.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: "uart_rx"
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "read_addr2[0]"
+  ui[1]: "read_addr2[1]"
+  ui[2]: "read_addr2[2]"
+  ui[3]: "seed[2]"
+  ui[4]: "seed[3]"
+  ui[5]: "seed[4]"
+  ui[6]: "seed[5]"
+  ui[7]: "seed[6]"
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: "uart_tx"
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "read_data[0]"
+  uo[1]: "read_data[1]"
+  uo[2]: "read_data[2]"
+  uo[3]: "read_data[3]"
+  uo[4]: "read_data[4]"
+  uo[5]: "read_data[5]"
+  uo[6]: "read_data[6]"
+  uo[7]: "read_data[7]"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "write_addr_read_addr1[0]"
+  uio[1]: "write_addr_read_addr1[1]"
+  uio[2]: "write_addr_read_addr1[2]"
+  uio[3]: "write_enable"
+  uio[4]: "load_enable"
+  uio[5]: "read_select"
+  uio[6]: "seed[0]"
+  uio[7]: "seed[1]"
 
 # Do not change!
 yaml_version: 6
