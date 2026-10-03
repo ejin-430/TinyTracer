@@ -33,11 +33,7 @@ project:
     - "io/io.sv"
     - "io/uart.sv"
     - "io/clkdiv.sv"
-    - "rtu/intersection_unit.sv"
-    - "rtu/ray_gen/ray_generator.sv"
-    - "rtu/ray_gen/rng.sv"
     - "rtu/rtu.sv"
-    - "rtu/shader_core.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
