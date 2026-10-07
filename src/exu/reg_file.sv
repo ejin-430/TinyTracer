@@ -55,7 +55,6 @@ always_ff @(posedge clk) begin
                     regs[5] <= load_v.z;
                     load_cycle <= 2'b00;
                 end
-                default: load_cycle <= 2'b00;
             endcase
         end else if (wen) begin 
             regs[waddr] <= wdata; 
