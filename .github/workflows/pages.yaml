@@ -1,7 +1,7 @@
 name: pages
 on:
   push:
-    branches: [main]
+    branches: [run-gds]
     paths:
       - 'docs/**'
       - 'theme_overrides/**'

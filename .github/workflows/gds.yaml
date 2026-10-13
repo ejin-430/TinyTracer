@@ -2,6 +2,7 @@ name: gds
 
 on:
   push:
+    branches: [run-gds]
   workflow_dispatch:
 
 jobs:
