@@ -8,7 +8,7 @@ module tt_um_reg_file_probe (
     output wire [7:0] uio_oe,
     input  wire       ena,
     input  wire       clk,
-    input  wire       rst_n
+    // input  wire       rst_n
 );
 
   logic [6:0] seed;
@@ -44,7 +44,7 @@ module tt_um_reg_file_probe (
 
   reg_file u_reg_file (
       .clk    (clk),
-      .rst_n  (rst_n),
+      // .rst_n  (rst_n),
       .load   (uio_in[4]),
       .load_u (load_u),
       .load_v (load_v),
