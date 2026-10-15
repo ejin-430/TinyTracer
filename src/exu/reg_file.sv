@@ -1,8 +1,23 @@
 `default_nettype wire
 
+module icg (
+    input  logic clk,
+    input  logic en,
+    output logic gclk
+);
+
+`ifdef SYNTHESIS
+    sg13cmos5l_lgcp_1 u_icg (.CLK(clk), .GATE(en), .GCLK(gclk));
+`else
+    logic en_l;
+    always_latch if (!clk) en_l <= en;
+    assign gclk = clk & en_l;
+`endif
+endmodule
+
 module reg_file (
     input  logic        clk,
-    input  logic        rst_n,
+    // input  logic        rst_n,
 
     // Parallel Load (Decode): R0-R2 <- load_u.{x,y,z}, R3-R5 <- load_v.{x,y,z}
     input  logic                   load,
@@ -26,15 +41,18 @@ module reg_file (
 
 logic [(tinytracer_pkg::WLEN-1) : 0] regs [7 : 0]; 
 logic [1:0] load_cycle;
+logic clk_gated;
 
-always_ff @(posedge clk) begin 
-    if (!rst_n) begin 
-        // Reset all registers to 0
-        for (integer i = 0; i < 8; i++) begin
-            regs[i] <= '0; 
-        end
-        load_cycle <= '0;
-    end else begin 
+icg u_reg_clk_gate (.clk(clk), .en(load || wen), .gclk(clk_gated));
+
+always_ff @(posedge clk_gated) begin 
+    // if (!rst_n) begin 
+    //     // Reset all registers to 0
+    //     for (integer i = 0; i < 8; i++) begin
+    //         regs[i] <= '0; 
+    //     end
+    //     load_cycle <= '0;
+    // end else begin 
         if (load) begin 
             case (load_cycle)
                 2'b00: begin
@@ -60,7 +78,7 @@ always_ff @(posedge clk) begin
             regs[waddr] <= wdata; 
         end 
     end 
-end 
+// end 
 
 always_comb begin 
     // Outputs 
