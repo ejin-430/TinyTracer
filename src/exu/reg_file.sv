@@ -1,22 +1,8 @@
 `default_nettype wire
 
-module icg (
-    input  logic clk,
-    input  logic en,
-    output logic gclk
-);
-
-`ifdef SYNTHESIS
-    sg13cmos5l_lgcp_1 u_icg (.CLK(clk), .GATE(en), .GCLK(gclk));
-`else
-    logic en_l;
-    always_latch if (!clk) en_l <= en;
-    assign gclk = clk & en_l;
-`endif
-endmodule
-
 module reg_file (
     input  logic        clk,
+    input  logic        rst_n,
 
     // Parallel Load (Decode): R0-R2 <- load_u.{x,y,z}, R3-R5 <- load_v.{x,y,z}
     input  logic                   load,
@@ -40,36 +26,41 @@ module reg_file (
 
 logic [(tinytracer_pkg::WLEN-1) : 0] regs [7 : 0]; 
 logic [1:0] load_cycle;
-logic clk_gated;
 
-icg u_reg_clk_gate (.clk(clk), .en(load || wen), .gclk(clk_gated));
-
-always_ff @(posedge clk_gated) begin 
-    if (load) begin 
-        case (load_cycle)
-            2'b00: begin
-                // Cycle 0: load x
-                regs[0] <= load_u.x;
-                regs[3] <= load_v.x;
-                load_cycle <= 2'b01;
-            end
-            2'b01: begin
-                // Cycle 1: load y
-                regs[1] <= load_u.y;
-                regs[4] <= load_v.y;
-                load_cycle <= 2'b10;
-            end
-            2'b10: begin
-                // Cycle 2: load z
-                regs[2] <= load_u.z;
-                regs[5] <= load_v.z;
-                load_cycle <= 2'b00;
-            end
-        endcase
-    end else if (wen) begin 
-        regs[waddr] <= wdata; 
+always_ff @(posedge clk) begin 
+    if (!rst_n) begin 
+        // Reset all registers to 0
+        for (integer i = 0; i < 8; i++) begin
+            regs[i] <= '0; 
+        end
+        load_cycle <= '0;
+    end else begin 
+        if (load) begin 
+            case (load_cycle)
+                2'b00: begin
+                    // Cycle 0: load x
+                    regs[0] <= load_u.x;
+                    regs[3] <= load_v.x;
+                    load_cycle <= 2'b01;
+                end
+                2'b01: begin
+                    // Cycle 1: load y
+                    regs[1] <= load_u.y;
+                    regs[4] <= load_v.y;
+                    load_cycle <= 2'b10;
+                end
+                2'b10: begin
+                    // Cycle 2: load z
+                    regs[2] <= load_u.z;
+                    regs[5] <= load_v.z;
+                    load_cycle <= 2'b00;
+                end
+            endcase
+        end else if (wen) begin 
+            regs[waddr] <= wdata; 
+        end 
     end 
-end
+end 
 
 always_comb begin 
     // Outputs 
@@ -78,6 +69,6 @@ always_comb begin
     result.x = regs[0]; 
     result.y = regs[1]; 
     result.z = regs[2]; 
-end
+end 
 
 endmodule
