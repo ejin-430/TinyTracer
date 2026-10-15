@@ -23,19 +23,14 @@ module reg_file (
     input  logic [2:0]      raddr2,
     output logic [tinytracer_pkg::WLEN-1:0] rdata2
 );
-// Number of register cells (make cell count explicit for reviewers/synthesis)
-localparam int N_REGS = 8;
 
-// Two parallel read ports (raddr1/rdata1 and raddr2/rdata2) read from the
-// same single `regs` storage. This does NOT duplicate storage — both ports
-// access the same N_REGS-entry array in parallel.
-logic [(tinytracer_pkg::WLEN-1) : 0] regs [N_REGS-1 : 0]; 
+logic [(tinytracer_pkg::WLEN-1) : 0] regs [7 : 0]; 
 logic [1:0] load_cycle;
 
 always_ff @(posedge clk) begin 
     if (!rst_n) begin 
         // Reset all registers to 0
-        for (integer i = 0; i < N_REGS; i++) begin
+        for (integer i = 0; i < 8; i++) begin
             regs[i] <= '0; 
         end
         load_cycle <= '0;
