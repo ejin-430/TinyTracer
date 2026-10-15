@@ -8,7 +8,7 @@ module tt_um_reg_file_probe (
     output wire [7:0] uio_oe,
     input  wire       ena,
     input  wire       clk,
-    // input  wire       rst_n
+    input  wire       rst_n
 );
 
   logic [6:0] seed;
