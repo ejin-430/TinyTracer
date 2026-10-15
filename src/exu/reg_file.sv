@@ -17,7 +17,7 @@ endmodule
 
 module reg_file (
     input  logic        clk,
-    // input  logic        rst_n,
+    input  logic        rst_n,
 
     // Parallel Load (Decode): R0-R2 <- load_u.{x,y,z}, R3-R5 <- load_v.{x,y,z}
     input  logic                   load,
@@ -46,13 +46,13 @@ logic clk_gated;
 icg u_reg_clk_gate (.clk(clk), .en(load || wen), .gclk(clk_gated));
 
 always_ff @(posedge clk_gated) begin 
-    // if (!rst_n) begin 
-    //     // Reset all registers to 0
-    //     for (integer i = 0; i < 8; i++) begin
-    //         regs[i] <= '0; 
-    //     end
-    //     load_cycle <= '0;
-    // end else begin 
+    if (!rst_n) begin 
+        // Reset all registers to 0
+        for (integer i = 0; i < 8; i++) begin
+            regs[i] <= '0; 
+        end
+        load_cycle <= '0;
+    end else begin 
         if (load) begin 
             case (load_cycle)
                 2'b00: begin
