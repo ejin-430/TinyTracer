@@ -44,7 +44,6 @@ module tt_um_reg_file_probe (
 
   reg_file u_reg_file (
       .clk    (clk),
-      .rst_n  (rst_n),
       .load   (uio_in[4]),
       .load_u (load_u),
       .load_v (load_v),
@@ -63,5 +62,6 @@ module tt_um_reg_file_probe (
   assign uio_oe = 8'hff;
 
   wire _unused = &{ena, ui_in[1:0], 1'b0};
+  wire _unused_rst = rst_n;
 
 endmodule
