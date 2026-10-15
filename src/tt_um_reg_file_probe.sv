@@ -44,7 +44,7 @@ module tt_um_reg_file_probe (
 
   reg_file u_reg_file (
       .clk    (clk),
-      // .rst_n  (rst_n),
+      .rst_n  (rst_n),
       .load   (uio_in[4]),
       .load_u (load_u),
       .load_v (load_v),
